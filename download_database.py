@@ -18,7 +18,11 @@ def download_database():
         return
 
     file_id = os.environ["GOOGLE_DRIVE_FILE_ID"]
-    credentials_json = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+    credentials_path = os.environ.get(
+        "GOOGLE_APPLICATION_CREDENTIALS",
+        "/etc/secrets/google-service-account.json"
+    )
+    credentials_json = Path(credentials_path).read_text()
 
     info = json.loads(credentials_json)
     credentials = service_account.Credentials.from_service_account_info(
